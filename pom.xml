@@ -1,0 +1,746 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.privemanagers</groupId>
+	<artifactId>micro</artifactId>
+	<version>${revision}</version>
+	<packaging>pom</packaging>
+
+	<description>Parent POM for Prive Micro</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.7.RELEASE</version>
+	</parent>
+
+	<profiles>
+		<profile>
+			<id>all</id>
+			<modules>
+				<module>api</module>
+				<module>assets</module>
+				<module>cost</module>
+				<module>db</module>
+				<module>ems</module>
+				<module>fixsim</module>
+				<module>opt</module>
+				<module>rebalancer</module>
+				<module>b2b</module>
+				<module>quant</module>
+				<module>prive</module>
+				<module>xassets</module>
+				<module>nginx</module>
+				<module>auth</module>
+				<module>assetlookup</module>
+				<module>soap-wrapper</module>
+				<module>wm</module>
+				<module>fixadaptercommon</module>
+				<module>fms</module>
+				<module>oss</module>
+				<module>security-common</module>
+				<module>security-common-extension</module>
+				<module>sftp-service</module>
+				<module>scheduler</module>
+				<module>pentaho</module>
+				<module>classification</module>
+				<module>structured-product-pricer</module>
+				<module>xparser</module>
+				<module>mds-common</module>
+				<module>mds-xignite</module>
+				<module>mds-tr</module>
+				<module>mds-sysjust</module>
+				<module>mobile</module>
+				<module>mds-bloomberg</module>
+				<module>bond-stats</module>
+				<module>guidelines</module>
+				<module>common-error-handling</module>
+				<module>common-concurrency</module>
+				<module>users</module>
+			</modules>
+		</profile>
+	</profiles>
+
+	<distributionManagement>
+		<repository>
+			<id>prive</id>
+			<name>Releases</name>
+			<url>https://${repository.url}/repository/maven-releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>prive</id>
+			<name>Snapshot</name>
+			<url>https://${repository.url}/repository/maven-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<properties>
+		<!-- Project -->
+		<revision>0.0.1-SNAPSHOT</revision>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- Repository -->
+		<namespace>privemanagers</namespace>
+		<repository.url>nexus.privemanagers.com</repository.url>
+		<repository.docker.prive.port>18078</repository.docker.prive.port>
+		<repository.docker.group.port>18079</repository.docker.group.port>
+		<repository.docker.url>https://${repository.url}:${repository.docker.group.port}</repository.docker.url>
+
+		<!-- Docker -->
+		<docker.image.name>${namespace}/${project.artifactId}</docker.image.name>
+		<docker.image.name.tag>${docker.image.name}:${revision}</docker.image.name.tag>
+		<docker.repo.image.name.tag>${repository.url}:${repository.docker.prive.port}/${docker.image.name.tag}</docker.repo.image.name.tag>
+
+		<!-- Java -->
+		<java.version>1.8</java.version>
+
+		<!-- Maven plugins -->
+		<flatten-maven-plugin.version>1.0.1</flatten-maven-plugin.version>
+		<maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
+		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+		<maven-surefire-plugin.version>2.7.2</maven-surefire-plugin.version>
+
+		<!-- Maven plugins need update -->
+		<docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
+
+		<!-- 3rd party libraries -->
+		<javax-json.version>1.1.2</javax-json.version>
+		<guava.version>24.1-jre</guava.version>
+		<mongodb.version>3.6.3</mongodb.version>
+		<quickfixj-core.version>1.6.4</quickfixj-core.version>
+		<commons-io.version>2.6</commons-io.version>
+		<commons-lang3.version>3.7</commons-lang3.version>
+		<org.jvnet.jaxb2_commons.version>1.11.1</org.jvnet.jaxb2_commons.version>
+		<swagger-codegen-maven-plugin.version>2.2.2</swagger-codegen-maven-plugin.version>
+		<auth0.jwt.version>3.3.0</auth0.jwt.version>
+		<swagger-annotations.version>1.5.16</swagger-annotations.version>
+		<jackson-dataformat-xml.version>2.9.5</jackson-dataformat-xml.version>
+		<org.apache.poi.version>3.17</org.apache.poi.version>
+		<com.mixpanel.version>1.4.4</com.mixpanel.version>
+		<spring-security-oauth2.version>2.3.4.RELEASE</spring-security-oauth2.version>
+		<spring-security-core.version>5.1.1.RELEASE</spring-security-core.version>
+		<spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
+		<hibernate-validator.version>6.0.9.Final</hibernate-validator.version>
+		<javax.validation-api.version>2.0.1.Final</javax.validation-api.version>
+		<mockito.core.version>1.10.19</mockito.core.version>
+		<spring.integration.java.dsl.version>1.2.3.RELEASE</spring.integration.java.dsl.version>
+		<de.flapdoodle.embed.mongo.version>1.50.5</de.flapdoodle.embed.mongo.version>
+	
+		<!-- 3rd party libraries - need an update -->
+		<io.springfox.version>2.2.2</io.springfox.version>
+		<ojalgo.version>43.0</ojalgo.version>
+
+		<!-- Qualifier -->
+		<qualifier.exec.name>exec</qualifier.exec.name>
+
+		<!-- JAR unpack folder -->
+		<jar-unpack-folder>jar/</jar-unpack-folder>
+		<lib-jar-folder>BOOT-INF/lib/</lib-jar-folder>
+		<prive-jar-folder>BOOT-INF/prive-lib/</prive-jar-folder>
+		<project-jar-name>${project.build.finalName}</project-jar-name>
+
+		<!-- SOAP endpoint URL -->
+		<soap.service.endpoint.url>https://api.privemanagers.com/wsdl/</soap.service.endpoint.url>
+
+		<jacoco.version>0.8.2</jacoco.version>
+		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+		<sonar.language>java</sonar.language>
+		<sonar.version>3.5.0.1254</sonar.version>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+
+		<!-- AWS SDK -->
+		<aws.sdk.version>1.11.462</aws.sdk.version>
+
+	</properties>
+
+	<build>
+
+		<!-- Keep name without version number for easier reference -->
+		<finalName>${project.artifactId}</finalName>
+
+		<pluginManagement>
+
+			<plugins>
+				<!-- To translate correctly ${revision} in children pom -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>flatten-maven-plugin</artifactId>
+					<version>${flatten-maven-plugin.version}</version>
+					<configuration>
+					</configuration>
+					<executions>
+						<!-- enable flattening -->
+						<execution>
+							<id>flatten</id>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>flatten</goal>
+							</goals>
+						</execution>
+						<!-- ensure proper cleanup -->
+						<execution>
+							<id>flatten.clean</id>
+							<phase>clean</phase>
+							<goals>
+								<goal>clean</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${maven-javadoc-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<failOnError>false</failOnError>
+						<quiet>true</quiet>
+					</configuration>
+				</plugin>
+
+				<!-- Unpack jar so we can build reusable docker layer for libs -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>${maven-antrun-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>unpack-jar</id>
+							<phase>package</phase>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							<configuration>
+								<target unless="maven.antrun.skip">
+									<echo message="unpack jar" />
+									<unzip dest="${project.build.directory}/${jar-unpack-folder}">
+										<fileset dir="${project.build.directory}">
+											<include name="${project-jar-name}.jar" />
+										</fileset>
+									</unzip>
+									<echo message="copy prive jar" />
+									<move
+										todir="${project.build.directory}/${jar-unpack-folder}/${prive-jar-folder}">
+										<fileset
+											dir="${project.build.directory}/${jar-unpack-folder}/${lib-jar-folder}">
+											<include name="*-${revision}.jar" />
+										</fileset>
+									</move>
+								</target>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>com.spotify</groupId>
+					<artifactId>docker-maven-plugin</artifactId>
+					<version>${docker-maven-plugin.version}</version>
+					<configuration>
+						<serverId>prive</serverId>
+						<registryUrl>${repository.docker.url}</registryUrl>
+						<imageName>${docker.image.name}</imageName>
+						<imageTags>
+							<imageTag>${revision}</imageTag>
+						</imageTags>
+						<dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+						<resources>
+							<resource>
+								<targetPath>/</targetPath>
+								<directory>${project.build.directory}</directory>
+								<include>jar/</include>
+							</resource>
+						</resources>
+					</configuration>
+					<executions>
+						<!-- Bind package phase with image build and tag from this plugin -->
+						<execution>
+							<id>build-image</id>
+							<phase>package</phase>
+							<goals>
+								<goal>build</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>tag-image</id>
+							<phase>package</phase>
+							<goals>
+								<goal>tag</goal>
+							</goals>
+							<configuration>
+								<image>${docker.image.name.tag}</image>
+								<newName>${docker.repo.image.name.tag}</newName>
+							</configuration>
+						</execution>
+						<!-- Bind deploy phase with image push from this plugin -->
+						<execution>
+							<id>push-image</id>
+							<phase>deploy</phase>
+							<goals>
+								<goal>push</goal>
+							</goals>
+							<configuration>
+								<imageName>${docker.repo.image.name.tag}</imageName>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- Fix m2e issues in eclipse for unknown lifecycle -->
+				<!-- http://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>flatten-maven-plugin</artifactId>
+										<versionRange>[${flatten-maven-plugin.version},)</versionRange>
+										<goals>
+											<goal>flatten</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>io.swagger</groupId>
+										<artifactId>swagger-codegen-maven-plugin</artifactId>
+										<versionRange>[${swagger-codegen-maven-plugin.version},)</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>exec-maven-plugin</artifactId>
+										<versionRange>[${exec-maven-plugin.version},)</versionRange>
+										<goals>
+											<goal>exec</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>io.swagger</groupId>
+					<artifactId>swagger-codegen-maven-plugin</artifactId>
+					<version>${swagger-codegen-maven-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire-plugin.version}</version>
+					<configuration>
+						<useSystemClassLoader>false</useSystemClassLoader>
+						<includes>
+							<include>**/Test*.java</include>
+							<include>**/*Test.java</include>
+							<include>**/*Tests.java</include>
+							<include>**/*TestCase.java</include>
+						</includes>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>${exec-maven-plugin.version}</version>
+					<inherited>false</inherited>
+					<executions>
+						<execution>
+							<id>Generate API specification</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>exec</goal>
+							</goals>
+							<configuration>
+								<executable>${basedir}/doc/swagger/swagger-gen/generatespec.sh</executable>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+			</plugins>
+
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>flatten-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<goals>
+							<goal>push</goal>
+							<goal>build</goal>
+							<goal>tag</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<skipDocker>true</skipDocker>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>${sonar.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<configuration>
+					<destFile>${sonar.jacoco.reportPath}</destFile>
+					<append>true</append>
+				</configuration>
+				<executions>
+					<execution>
+						<id>agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>com.privemanagers</groupId>
+				<artifactId>api</artifactId>
+				<version>${revision}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.privemanagers</groupId>
+				<artifactId>common-error-handling</artifactId>
+				<version>${revision}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.privemanagers</groupId>
+				<artifactId>db</artifactId>
+				<version>${revision}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.privemanagers</groupId>
+				<artifactId>mds-common</artifactId>
+				<version>${revision}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.privemanagers</groupId>
+				<artifactId>fixadaptercommon</artifactId>
+				<version>${revision}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.privemanagers</groupId>
+				<artifactId>xassets</artifactId>
+				<version>${revision}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.mongodb</groupId>
+				<artifactId>bson</artifactId>
+				<version>${mongodb.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.mongodb</groupId>
+				<artifactId>mongo-java-driver</artifactId>
+				<version>${mongodb.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish</groupId>
+				<artifactId>javax.json</artifactId>
+				<version>${javax-json.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.dataformat</groupId>
+				<artifactId>jackson-dataformat-xml</artifactId>
+				<version>${jackson-dataformat-xml.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.quickfixj</groupId>
+				<artifactId>quickfixj-core</artifactId>
+				<version>${quickfixj-core.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.quickfixj</groupId>
+				<artifactId>quickfixj-messages-fix44</artifactId>
+				<version>${quickfixj-core.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jvnet.jaxb2_commons</groupId>
+				<artifactId>jaxb2-basics-runtime</artifactId>
+				<version>${org.jvnet.jaxb2_commons.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jvnet.jaxb2_commons</groupId>
+				<artifactId>jaxb2-basics</artifactId>
+				<version>${org.jvnet.jaxb2_commons.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>${org.apache.poi.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>${org.apache.poi.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>${io.springfox.version}</version>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${io.springfox.version}</version>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.security.oauth</groupId>
+				<artifactId>spring-security-oauth2</artifactId>
+				<version>${spring-security-oauth2.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring-security-core.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-jwt</artifactId>
+				<version>${spring-security-jwt.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.privemanagers</groupId>
+				<artifactId>security-common</artifactId>
+				<version>${revision}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.privemanagers</groupId>
+				<artifactId>security-common-extension</artifactId>
+				<version>${revision}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.hibernate.validator</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>${hibernate-validator.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.hibernate.validator</groupId>
+				<artifactId>hibernate-validator-annotation-processor</artifactId>
+				<version>${hibernate-validator.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>${javax.validation-api.version}</version>
+			</dependency>
+			
+			 <dependency>
+       			 <groupId>org.mockito</groupId>
+        		 <artifactId>mockito-core</artifactId>
+        		 <version>${mockito.core.version}</version>
+      		</dependency>
+      		
+      		<dependency>
+       			 <groupId>org.springframework.integration</groupId>
+        		 <artifactId>spring-integration-java-dsl</artifactId>
+        		 <version>${spring.integration.java.dsl.version}</version>
+      		</dependency>
+      		
+      		<dependency>
+				<groupId>de.flapdoodle.embed</groupId>
+				<artifactId>de.flapdoodle.embed.mongo</artifactId>
+				<version>${de.flapdoodle.embed.mongo.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.privemanagers</groupId>
+				<artifactId>common-concurrency</artifactId>
+				<version>${revision}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-validator</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.yaml</groupId>
+					<artifactId>snakeyaml</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.aspectj</groupId>
+					<artifactId>aspectjrt</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-undertow</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.json</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+		</dependency>
+
+	</dependencies>
+
+</project>
